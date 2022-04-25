@@ -274,31 +274,6 @@ describe ResponseController do
       post :create, params: request_params
       expect(response).to redirect_to('/response/save?error_msg=&id=1&msg=Your+response+was+successfully+saved.')
     end
-
-    it 'renders a table of relevant API metrics when requested' do
-      allow(ResponseMap).to receive(:find).with('1').and_return(review_response_map)
-      allow(Response).to receive_message_chain(:where, :order).with(map_id: 1, round: 1).with(created_at: :desc).and_return([review_response_round1])
-      allow(Questionnaire).to receive(:find).with('1').and_return(questionnaire)
-      allow(Answer).to receive(:create).with(response_id: 1, question_id: 1, answer: '98', comments: 'LGTM').and_return(answer)
-      allow(answer).to receive(:update_attribute).with(any_args).and_return('OK!')
-      allow_any_instance_of(Response).to receive(:email).and_return('OK!')
-      request_params = {
-        id: 1,
-        review: {
-          questionnaire_id: '1',
-          round: 1,
-          comments: 'no comment'
-        },
-        responses: {
-          '0' => { score: 98, comment: 'LGTM' }
-        },
-        isSubmit: 'No'
-      }
-      post :create, params: request_params
-      expect(response).to redirect_to('/response/save?error_msg=&id=1&msg=Your+response+was+successfully+saved.')
-      click_button("Get Review Feedback")
-      expect(find_by_id("metrictable")).not_to be_nil
-    end
   end
 
   describe '#save' do
