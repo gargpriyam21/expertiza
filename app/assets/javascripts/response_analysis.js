@@ -88,6 +88,7 @@ function generate_table(responses, config_file_api_call_values, processed_commen
     }
 
     let table = document.createElement("table");
+    table.setAttribute("id", "metrictable");
     let table_row = table.insertRow(-1);                   // table row.
 
     processed_comment_json_string = JSON.parse(processed_comment_json)['reviews'];
